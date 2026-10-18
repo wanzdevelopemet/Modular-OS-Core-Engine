@@ -77,10 +77,10 @@ Modular-OS is designed to completely resolve the three perennial pain points of 
 +--------------------------------------------------------------------------------------------------+
 |                                    NGINX REVERSE PROXY (:80)                                     |
 |  - /api/core/               --> Proxies to Laravel Microkernel (:8000)                           |
-|  - /modules/helloworld/     --> Directly serves the static bundle of HelloWorld Module          |
+|  - /modules/helloworld/     --> Directly serves the static bundle of HelloWorld Module           |
 |  - /modules/shop/           --> Directly serves the static bundle of Shop VIP Module             |
 |  - /modules/forum/          --> Directly serves the static HTML5/JS of Forum Module              |
-|  - / and SPA routes          --> Serves React 18 Host Shell (:80)                                 |
+|  - / and SPA routes         --> Serves React 18 Host Shell (:80)                                 |
 +-------------------------------------------+------------------------------------------------------+
                                             |
                  +--------------------------+--------------------------+
