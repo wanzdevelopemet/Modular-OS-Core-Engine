@@ -1,0 +1,11 @@
+{
+  "module_id": "helloworld-module",
+  "name": "Hello World Starter (Template)",
+  "version": "1.0.0",
+  "frontend_type": "iframe",
+  "remote_entry_url": "/modules/helloworld/index.html",
+  "requires_auth": false,
+  "secret_key_hash": "helloworld_super_secret_key_2026",
+  "description": "Module mẫu chuẩn (Isolated Starter Template) chứng minh tích hợp CAMS SSO, chữ ký HMAC Zero-Trust và trao đổi sự kiện qua Anti-Mesh Event Bus (@modular-os/bridge)."
+}
+

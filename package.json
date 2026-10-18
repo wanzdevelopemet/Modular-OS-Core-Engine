@@ -1,0 +1,43 @@
+{
+  "name": "modular-os-monorepo",
+  "version": "1.0.0",
+  "description": "Modular-OS: Microkernel & Micro-Frontend Enterprise Architecture",
+  "private": true,
+  "workspaces": [
+    "core/frontend-shell",
+    "packages/*",
+    "modules/*/frontend",
+    "modules/*/backend",
+    "modules/*"
+  ],
+  "scripts": {
+    "build:sdk": "npm run build --workspace=@modular-os/bridge",
+    "build:shell": "npm run build --workspace=@modular-os/frontend-shell",
+    "copy:forum": "node scripts/copy-forum.js",
+    "build:modules": "npm run copy:forum && npm run build --workspace=@modules/helloworld-frontend && npm run build --workspace=@modules/shop-frontend",
+    "build:all": "npm run build:sdk && npm run build:shell && npm run build:modules",
+    "dev:sdk": "npm run dev --workspace=@modular-os/bridge",
+    "dev:shell": "npm run dev --workspace=@modular-os/frontend-shell",
+    "dev:modules": "concurrently -n \"SHOP-FE,FORUM-FE,HELLO-FE\" -c \"blue,green,magenta\" \"npm run dev --workspace=@modules/shop-frontend\" \"npm run dev --workspace=@modules/forum-frontend\" \"npm run dev --workspace=@modules/helloworld-frontend\"",
+    "dev:all": "concurrently -n \"DOCKER,SDK,SHELL\" -c \"magenta,cyan,yellow\" \"docker compose up\" \"npm run dev:sdk\" \"npm run dev:shell\"",
+    "docker:up": "docker compose up -d",
+    "docker:down": "docker compose down",
+    "docker:logs": "docker compose logs -f",
+    "lint": "npm run lint --workspaces --if-present",
+    "test": "npm run test --workspaces --if-present"
+  },
+  "devDependencies": {
+    "@types/node": "^26.6.5",
+    "concurrently": "^8.2.2"
+  },
+  "keywords": [
+    "microkernel",
+    "micro-frontend",
+    "zero-trust",
+    "anti-mesh",
+    "event-bus",
+    "vite-federation"
+  ],
+  "author": "Principal Architect <architect@modular-os.internal>",
+  "license": "MIT"
+}

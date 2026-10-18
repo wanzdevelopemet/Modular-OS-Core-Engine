@@ -1,0 +1,10 @@
+{
+  "identifier": "cams",
+  "name": "Core Account Management System",
+  "version": "1.0.0",
+  "description": "Tiện ích lõi quản lý định danh người dùng tập trung, cấp phát JWT và đồng bộ hồ sơ qua Redis Event Bus.",
+  "author": "Modular-OS Core Team",
+  "routes_prefix": "api/extensions/cams",
+  "enabled": true
+}
+

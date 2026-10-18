@@ -1,0 +1,10 @@
+{
+  "identifier": "notification-center",
+  "name": "Notification Center",
+  "version": "1.0.0",
+  "description": "Tiện ích lõi tiếp nhận và phân phối thông báo thời gian thực liên module thông qua Redis Event Bus.",
+  "author": "Modular-OS Core Team",
+  "routes_prefix": "api/extensions/notifications",
+  "enabled": true
+}
+

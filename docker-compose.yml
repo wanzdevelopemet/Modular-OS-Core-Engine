@@ -1,0 +1,112 @@
+networks:
+  modular-net:
+    driver: bridge
+
+services:
+  # ----------------------------------------------------------------------
+  # 1. NGINX REVERSE PROXY: Cổng điều hướng tập trung của hệ sinh thái
+  # ----------------------------------------------------------------------
+  nginx-proxy:
+    image: nginx:alpine
+    container_name: modular-nginx-proxy
+    restart: unless-stopped
+    ports:
+      - "80:80"
+    volumes:
+      - ./docker/nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./core/frontend-shell/dist:/usr/share/nginx/html/shell:ro
+      - ./modules/helloworld-module/frontend/dist:/usr/share/nginx/html/modules/helloworld:ro
+      - ./modules/shop-module/frontend/dist:/usr/share/nginx/html/modules/shop:ro
+      - ./modules/forum-module/frontend:/usr/share/nginx/html/modules/forum:ro
+    depends_on:
+      - laravel-core
+    networks:
+      - modular-net
+
+  # ----------------------------------------------------------------------
+  # 2. MYSQL DATABASE: Cơ sở dữ liệu hạt nhân (Microkernel DB)
+  # ----------------------------------------------------------------------
+  mysql:
+    image: mysql:8.0
+    container_name: modular-mysql
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: root_password_secure
+      MYSQL_DATABASE: modular_os_db
+      MYSQL_USER: modular_user
+      MYSQL_PASSWORD: modular_password
+    ports:
+      - "3307:3306"
+    volumes:
+      - mysql-data:/var/lib/mysql
+    networks:
+      - modular-net
+
+  # ----------------------------------------------------------------------
+  # 3. REDIS BROKER: Trạm trung chuyển sự kiện Pub/Sub (Anti-Mesh Event Bus)
+  # ----------------------------------------------------------------------
+  redis-broker:
+    image: redis:7-alpine
+    container_name: modular-redis-broker
+    restart: unless-stopped
+    command: redis-server --appendonly yes --requirepass redis_password
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis-data:/data
+    networks:
+      - modular-net
+
+  # ----------------------------------------------------------------------
+  # 4. LARAVEL CORE: Hạt nhân Microkernel (Laravel 11)
+  # ----------------------------------------------------------------------
+  laravel-core:
+    build:
+      context: .
+      dockerfile: docker/laravel/Dockerfile
+    container_name: modular-laravel-core
+    restart: unless-stopped
+    command: php artisan octane:start --server=roadrunner --host=0.0.0.0 --port=8000
+    environment:
+      APP_NAME: "Modular-OS Kernel"
+      APP_ENV: local
+      APP_DEBUG: "true"
+      APP_URL: http://localhost
+      DB_CONNECTION: mysql
+      DB_HOST: mysql
+      DB_PORT: 3306
+      DB_DATABASE: modular_os_db
+      DB_USERNAME: modular_user
+      DB_PASSWORD: modular_password
+      REDIS_HOST: redis-broker
+      REDIS_PASSWORD: redis_password
+      REDIS_PORT: 6379
+      JWT_SECRET: modular_os_cams_jwt_super_secret_key_2026_xyz
+    volumes:
+      - ./core/kernel:/var/www/html
+      - ./core/extensions:/var/www/html/core/extensions
+    ports:
+      - "8000:8000"
+    depends_on:
+      - mysql
+      - redis-broker
+    networks:
+      - modular-net
+
+  # ----------------------------------------------------------------------
+  # 5. HELLOWORLD MODULE: Module mẫu khởi đầu chạy độc lập (Isolated Template)
+  # ----------------------------------------------------------------------
+  helloworld-module:
+    build:
+      context: .
+      dockerfile: modules/helloworld-module/Dockerfile
+    container_name: modular-helloworld-module
+    restart: unless-stopped
+    ports:
+      - "4003:4003"
+    networks:
+      - modular-net
+
+volumes:
+  mysql-data:
+  redis-data:

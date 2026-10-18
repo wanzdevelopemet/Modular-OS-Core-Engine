@@ -1,0 +1,11 @@
+{
+  "name": "@modules/helloworld",
+  "version": "1.0.0",
+  "description": "Modular-OS HelloWorld Starter Template",
+  "private": true,
+  "scripts": {
+    "build": "npm run build --workspace=@modules/helloworld-frontend",
+    "dev": "npm run dev --workspace=@modules/helloworld-frontend"
+  }
+}
+

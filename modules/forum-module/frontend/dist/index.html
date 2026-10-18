@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Diễn Đàn Cộng Đồng | Modular-OS</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    body {
+      font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
+      background-color: #030712;
+      color: #f3f4f6;
+      padding: 1.5rem;
+      min-height: 100vh;
+    }
+    .forum-container {
+      max-width: 900px;
+      margin: 0 auto;
+    }
+    .header-card {
+      background: linear-gradient(135deg, rgba(6, 78, 59, 0.7) 0%, rgba(15, 23, 42, 0.9) 100%);
+      border: 1px solid rgba(16, 185, 129, 0.3);
+      border-radius: 20px;
+      padding: 1.75rem 2rem;
+      margin-bottom: 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+    .badge-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      padding: 0.3rem 0.75rem;
+      background: rgba(16, 185, 129, 0.15);
+      border: 1px solid rgba(16, 185, 129, 0.3);
+      border-radius: 999px;
+      color: #34d399;
+      font-size: 0.75rem;
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+    }
+    .live-dot {
+      width: 8px;
+      height: 8px;
+      background-color: #10b981;
+      border-radius: 50%;
+      box-shadow: 0 0 10px #10b981;
+      animation: pulse 1.5s infinite;
+    }
+    @keyframes pulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.4; transform: scale(0.85); }
+    }
+    /* Event Bus Alert Banner */
+    .event-stream-box {
+      background: rgba(17, 24, 39, 0.8);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 16px;
+      padding: 1.25rem 1.5rem;
+      margin-bottom: 2rem;
+    }
+    .event-stream-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 0.75rem;
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: #94a3b8;
+    }
+    .event-log-item {
+      background: rgba(15, 23, 42, 0.9);
+      border-left: 4px solid #f59e0b;
+      padding: 0.75rem 1rem;
+      border-radius: 6px;
+      margin-bottom: 0.5rem;
+      font-size: 0.85rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      animation: slideIn 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    @keyframes slideIn {
+      from { opacity: 0; transform: translateY(-8px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    /* Thread Posts */
+    .post-card {
+      background: rgba(17, 24, 39, 0.6);
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      border-radius: 16px;
+      padding: 1.5rem;
+      margin-bottom: 1.25rem;
+      transition: border-color 0.2s;
+    }
+    .post-header {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      margin-bottom: 1rem;
+    }
+    .avatar {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: #1e293b;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      color: #818cf8;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    .author-name {
+      font-weight: 700;
+      font-size: 0.95rem;
+      color: #f1f5f9;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .post-time {
+      font-size: 0.75rem;
+      color: #64748b;
+    }
+    .vip-tag {
+      font-size: 0.65rem;
+      font-weight: 800;
+      padding: 0.15rem 0.5rem;
+      border-radius: 4px;
+      background: rgba(245, 158, 11, 0.2);
+      color: #f59e0b;
+      border: 1px solid rgba(245, 158, 11, 0.4);
+      display: none;
+    }
+    .vip-tag.active {
+      display: inline-block;
+      animation: popIn 0.3s ease-out;
+    }
+    @keyframes popIn {
+      0% { transform: scale(0.5); opacity: 0; }
+      100% { transform: scale(1); opacity: 1; }
+    }
+    .post-content {
+      color: #cbd5e1;
+      font-size: 0.9rem;
+      line-height: 1.6;
+    }
+  </style>
+</head>
+<body>
+  <div class="forum-container">
+    <!-- Header Card -->
+    <div class="header-card">
+      <div>
+        <div class="badge-pill">
+          <span class="live-dot"></span> Ngàm Sandboxed Iframe • HTML5/JS Thuần
+        </div>
+        <h1 style="font-size: 1.75rem; font-weight: 800; color: #f8fafc; margin-bottom: 0.35rem;">
+          Diễn Đàn Cộng Đồng Modular-OS
+        </h1>
+        <p style="color: #a7f3d0; font-size: 0.875rem;">
+          Chứng minh Anti-Mesh: Diễn đàn không có API gọi tới Shop. Toàn bộ cập nhật huy hiệu được lắng nghe qua Redis Event Bus!
+        </p>
+      </div>
+
+      <div style="background: rgba(15, 23, 42, 0.8); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 12px; padding: 0.75rem 1rem; text-align: center;">
+        <span style="font-size: 0.7rem; color: #94a3b8; display: block; text-transform: uppercase;">Trạng thái Bus</span>
+        <strong style="color: #34d399; font-size: 0.85rem;">CONNECTED</strong>
+      </div>
+    </div>
+
+    <!-- Live Event Bus Banner -->
+    <div class="event-stream-box">
+      <div class="event-stream-header">
+        <span>📡 Luồng Sự Kiện Lắng Nghe Realtime (CoreBridge.on)</span>
+        <span id="event-count" style="color: #f59e0b; font-family: monospace;">0 Sự kiện</span>
+      </div>
+      <div id="event-logs-container">
+        <div style="color: #64748b; font-size: 0.8rem; font-style: italic;" id="empty-state">
+          Đang chờ sự kiện từ các module khác (VD: Bấm Mua Huy Hiệu tại Shop Module để xem hiệu ứng)...
+        </div>
+      </div>
+    </div>
+
+    <!-- Discussion Threads -->
+    <h3 style="font-size: 1.15rem; font-weight: 700; color: #e2e8f0; margin-bottom: 1rem;">
+      Các Thảo Luận Mới Nhất
+    </h3>
+
+    <!-- Post 1 (User 123) -->
+    <div class="post-card" id="post-user-123">
+      <div class="post-header">
+        <div class="avatar" id="avatar-123">123</div>
+        <div>
+          <div class="author-name">
+            <span>Thành Viên #123</span>
+            <span class="vip-tag" id="badge-123">⭐ VIP VÀNG</span>
+          </div>
+          <span class="post-time">10 phút trước • Thảo luận Kiến trúc</span>
+        </div>
+      </div>
+      <div class="post-content">
+        Chào mọi người! Tôi vừa thử nghiệm kiến trúc Anti-Mesh trên Modular-OS. Thật tuyệt vời khi hai module hoàn toàn không cần gọi HTTP lẫn nhau mà vẫn đồng bộ trạng thái tức thời qua Redis Event Bus!
+      </div>
+    </div>
+
+    <!-- Post 2 -->
+    <div class="post-card">
+      <div class="post-header">
+        <div class="avatar">AD</div>
+        <div>
+          <div class="author-name">
+            <span>Kiến Trúc Sư Trưởng</span>
+            <span class="vip-tag active" style="background: rgba(99, 102, 241, 0.2); color: #818cf8; border-color: rgba(99, 102, 241, 0.4);">
+              🛡️ SUPER ADMIN
+            </span>
+          </div>
+          <span class="post-time">1 giờ trước • Cập nhật hệ thống</span>
+        </div>
+      </div>
+      <div class="post-content">
+        Phiên bản Modular-OS này đã kích hoạt Zero-Trust Gateway với chữ ký số HMAC-SHA256 và cơ chế Kill-Switch tự động cách ly module lỗi bằng ErrorBoundary. Mời mọi người dùng thử!
+      </div>
+    </div>
+  </div>
+
+  <script src="/app.js"></script>
+</body>
+</html>
+

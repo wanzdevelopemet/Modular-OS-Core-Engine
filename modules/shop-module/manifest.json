@@ -1,0 +1,11 @@
+{
+  "module_id": "shop-module",
+  "name": "Cửa Hàng Trực Tuyến (Shop VIP)",
+  "version": "1.0.0",
+  "frontend_type": "federation",
+  "remote_entry_url": "http://localhost:4001/assets/remoteEntry.js",
+  "requires_auth": true,
+  "secret_key_hash": "secret_hash_cua_shop",
+  "description": "Module bán vật phẩm & huy hiệu VIP. Chứng minh nguyên lý Anti-Mesh: không gọi API trực tiếp sang Diễn đàn."
+}
+

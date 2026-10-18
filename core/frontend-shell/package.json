@@ -1,0 +1,26 @@
+{
+  "name": "@modular-os/frontend-shell",
+  "version": "1.0.0",
+  "description": "Host Shell UI for Modular-OS Microkernel & Micro-Frontend Framework",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite --port 3000 --host",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "react-router-dom": "^6.23.1",
+    "lucide-react": "^0.378.0",
+    "@modular-os/bridge": "*"
+  },
+  "devDependencies": {
+    "@types/react": "^18.3.2",
+    "@types/react-dom": "^18.3.0",
+    "@vitejs/plugin-react": "^4.2.1",
+    "vite": "^5.2.11"
+  }
+}
+

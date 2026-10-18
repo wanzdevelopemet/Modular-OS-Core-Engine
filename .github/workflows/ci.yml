@@ -1,0 +1,91 @@
+name: Modular-OS CI/CD Pipeline
+
+on:
+  push:
+    branches: [ "main", "master" ]
+  pull_request:
+    branches: [ "main", "master" ]
+  workflow_dispatch:
+
+jobs:
+  test-and-verify:
+    name: Build, Lint, Test & Smoke Verify
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 📥 Checkout repository
+        uses: actions/checkout@v4
+
+      - name: ⚙️ Setup Node.js 20.x
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'npm'
+
+      - name: 📦 Install Monorepo NPM Dependencies
+        run: npm ci || npm install
+
+      - name: 🔍 Run Frontend Linting
+        run: npm run lint --if-present
+
+      - name: 🔨 Compile Frontend Shell & Satellite Modules
+        run: npm run build:all
+
+      - name: 📝 Prepare Laravel Environment Config
+        run: |
+          cp core/kernel/.env.example core/kernel/.env
+          sed -i 's/APP_DEBUG=false/APP_DEBUG=true/g' core/kernel/.env
+          sed -i 's/APP_KEY=/APP_KEY=base64:ModularOSSecretKeyGeneration2026Secure123456=/g' core/kernel/.env
+          echo "CAMS_SUPERADMIN_ENABLED=true" >> core/kernel/.env
+          echo "CAMS_SUPERADMIN_PASSWORD=admin123" >> core/kernel/.env
+          echo "CORS_ALLOWED_ORIGINS=http://localhost,http://127.0.0.1" >> core/kernel/.env
+
+      - name: 🐳 Build Docker Images
+        run: docker compose build
+
+      - name: 🚀 Spin up Modular-OS Infrastructure (Detached Mode)
+        run: docker compose up -d
+
+      - name: ⏳ Wait for MySQL and Services Readiness
+        run: |
+          echo "Waiting for MySQL database to become healthy..."
+          timeout 60s bash -c 'until docker compose exec -T mysql mysqladmin ping -h localhost -u modular_user -pmodular_password --silent; do sleep 2; done'
+          echo "MySQL is up and ready."
+
+      - name: 🔑 Generate App Key & Run Core Migrations
+        run: |
+          docker compose exec -T laravel-core php artisan key:generate
+          docker compose exec -T laravel-core php artisan config:clear
+          docker compose exec -T laravel-core php artisan migrate --force
+
+      - name: 🧪 Execute Backend PHPUnit Test Suite
+        run: |
+          docker compose exec -T laravel-core vendor/bin/phpunit --testdox
+
+      - name: 🌐 Perform End-to-End Health Checks via Curl
+        run: |
+          echo "Testing Nginx Core Gateway Health Endpoint..."
+          curl -f -s -i http://localhost/api/core/health | grep -E "200 OK|healthy"
+          
+          echo "Testing React Host Shell Root Delivery..."
+          curl -f -s -i http://localhost/ | grep "200 OK"
+          
+          echo "Testing Shop Satellite Module Static Bundle..."
+          curl -f -s -i http://localhost/modules/shop/index.html | grep "200 OK"
+          
+          echo "Testing HelloWorld Module Static Bundle..."
+          curl -f -s -i http://localhost/modules/helloworld/index.html | grep "200 OK"
+          
+          echo "Testing Forum Sandboxed Iframe Module..."
+          curl -f -s -i http://localhost/modules/forum/index.html | grep "200 OK"
+
+      - name: 📋 Capture Diagnostics Logs on Failure
+        if: failure()
+        run: |
+          echo "=== DOCKER COMPOSE LOGS ==="
+          docker compose logs --tail=100
+
+      - name: 🛑 Teardown Infrastructure
+        if: always()
+        run: docker compose down -v
+

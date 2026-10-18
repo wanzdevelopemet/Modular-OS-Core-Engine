@@ -1,0 +1,29 @@
+{
+  "name": "@modular-os/bridge",
+  "version": "1.0.0",
+  "description": "Universal SDK Bridge for Modular-OS Microkernel & Micro-Frontend Ecosystem",
+  "type": "module",
+  "main": "index.js",
+  "exports": {
+    ".": "./index.js"
+  },
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsc --watch"
+  },
+  "keywords": [
+    "modular-os",
+    "sdk",
+    "micro-frontend",
+    "microkernel",
+    "anti-mesh",
+    "hmac",
+    "event-bus"
+  ],
+  "author": "Modular-OS Architecture Team",
+  "license": "MIT",
+  "devDependencies": {
+    "typescript": "^5.4.5"
+  }
+}

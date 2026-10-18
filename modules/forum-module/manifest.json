@@ -1,0 +1,11 @@
+{
+  "module_id": "forum-module",
+  "name": "Diễn Đàn Cộng Đồng (Forum Iframe)",
+  "version": "1.0.0",
+  "frontend_type": "iframe",
+  "remote_entry_url": "http://localhost:4002/index.html",
+  "requires_auth": false,
+  "secret_key_hash": "secret_hash_cua_forum",
+  "description": "Module Diễn đàn thảo luận công cộng chạy bằng HTML5/JS thuần nạp qua ngàm Iframe. Lắng nghe sự kiện từ Shop qua Event Bus."
+}
+

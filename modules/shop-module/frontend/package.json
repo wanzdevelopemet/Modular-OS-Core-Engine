@@ -1,0 +1,22 @@
+{
+  "name": "@modules/shop-frontend",
+  "version": "1.0.0",
+  "description": "Frontend React Micro-app for Shop Module",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite --port 4001",
+    "build": "vite build"
+  },
+  "dependencies": {
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "lucide-react": "^0.378.0",
+    "@modular-os/bridge": "*"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-react": "^4.2.1",
+    "vite": "^5.2.11"
+  }
+}
+
